@@ -14,7 +14,7 @@ use ilCtrl;
  */
 trait CtrlTrait
 {
-    private ilCtrl $ctrl;
+    private ?ilCtrl $ctrl = null;
 
     private function getCtrl() : ilCtrl
     {
