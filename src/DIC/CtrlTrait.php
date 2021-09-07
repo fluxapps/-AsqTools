@@ -33,4 +33,18 @@ trait CtrlTrait
             $command
         );
     }
+
+    public function redirectToCommand(string $command) : void
+    {
+        $link = $this->getCommandLink($command);
+        $this->getCtrl()->redirectToURL($link);
+    }
+
+    public function setLinkParameter(string $parameter, string $value) : void
+    {
+        $this->getCtrl()->setParameterByClass(
+            $this->getCtrl()->getCmdClass(),
+            $parameter,
+            $value);
+    }
 }
