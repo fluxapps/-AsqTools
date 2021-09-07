@@ -34,12 +34,12 @@ interface IAsqPlugin
     function getObject(string $key) : IAsqObject;
 
     /**
-     * Gets all objects of a type
+     * Gets all objects of modules
      *
-     * @param string $type
+     * @param IAsqModule[] $modules
      * @return IAsqObject[]
      */
-    function getObjectsOfType(string $type) : array;
+    function getObjectsOfModules(array $modules) : array;
 
     /**
      * Executes a command in the AsqPlugin

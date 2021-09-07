@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain\Modules;
 
 use Fluxlabs\Assessment\Tools\Domain\IObjectAccess;
+use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
 use Fluxlabs\Assessment\Tools\Event\IEventQueue;
@@ -78,7 +79,7 @@ abstract class AbstractAsqModule implements  IAsqModule
         $this->{$command}();
     }
 
-    public function createObject(ObjectConfiguration $config) : ITestObject
+    public function createObject(ObjectConfiguration $config) : IAsqObject
     {
         throw new AsqException(
             sprintf(

@@ -32,10 +32,10 @@ interface IObjectAccess
     public function getObject(string $key) : IAsqObject;
 
     /**
-     * Gets all objects of a type defined in ITestModule
+     * Gets all objects of modules
      *
-     * @param string $type
+     * @param IAsqModule[] $modules
      * @return IAsqObject[]
      */
-    public function getObjectsOfType(string $type) : array;
+    function getObjectsOfModules(array $modules) : array;
 }

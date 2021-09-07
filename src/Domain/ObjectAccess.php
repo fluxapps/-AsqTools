@@ -32,8 +32,8 @@ class ObjectAccess implements IObjectAccess
         return $this->plugin->getObject($key);
     }
 
-    public function getObjectsOfType(string $type) : array
+    public function getObjectsOfModules(array $modules) : array
     {
-        return $this->plugin->getObjectsOfType($type);
+        return $this->plugin->getObjectsOfModules($modules);
     }
 }

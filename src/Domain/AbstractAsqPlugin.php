@@ -113,11 +113,9 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
         return $this->objects[$key];
     }
 
-    public function getObjectsOfType(string $type) : array
+    public function getObjectsOfModules(array $modules) : array
     {
-        $modules = $this->getModulesOfType($type);
-
-        $modules = array_map(function($module) {
+        $module_types = array_map(function($module) {
             return get_class($module);
         }, $modules);
 
@@ -129,7 +127,7 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
             }
 
             /** @var $configuration ObjectConfiguration */
-            if (in_array($configuration->moduleName(), $modules)) {
+            if (in_array($configuration->moduleName(), $module_types)) {
                 $objects[] = $this->getObject($key);
             }
         }

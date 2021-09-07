@@ -53,7 +53,7 @@ class AsqUI implements IAsqUI, IEventUser
         }
 
         if (get_class($event) === AddTabEvent::class) {
-            $this->tabs[] = $event->getData();
+            $this->tabs[] = $event->getTab();
         }
     }
 
