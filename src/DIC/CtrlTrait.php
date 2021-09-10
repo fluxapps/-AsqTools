@@ -29,7 +29,7 @@ trait CtrlTrait
     public function getCommandLink(string $command) : string
     {
         return $this->getCtrl()->getLinkTargetByClass(
-            $this->getCtrl()->getCmdClass(),
+            end($this->getCtrl()->getCallHistory())['class'],
             $command
         );
     }

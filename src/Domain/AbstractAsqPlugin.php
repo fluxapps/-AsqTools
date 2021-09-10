@@ -31,9 +31,14 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     use CtrlTrait;
 
     /**
-     * @var IAsqModule[] $commands
+     * @var IAsqModule[]
      */
-    protected array $commands =[];
+    protected array $commands = [];
+
+    /**
+     * @var IAsqModule[]
+     */
+    protected array $transfers = [];
 
     protected EventQueue $event_queue;
 
@@ -80,6 +85,10 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 
         foreach ($module->getCommands() as $command) {
             $this->commands[$command] = $module;
+        }
+
+        foreach ($module->getExternals() as $external) {
+            $this->transfers[$external] = $module;
         }
     }
 
@@ -139,6 +148,13 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     {
         if (array_key_exists($command, $this->commands)) {
             $this->commands[$command]->executeCommand($command);
+        }
+    }
+
+    function handleTransfer(string $next): void
+    {
+        if (array_key_exists($next, $this->transfers)) {
+            $this->transfers[$next]->executeTransfer($next);
         }
     }
 

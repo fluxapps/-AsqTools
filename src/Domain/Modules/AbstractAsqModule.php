@@ -39,6 +39,11 @@ abstract class AbstractAsqModule implements  IAsqModule
         return [];
     }
 
+    public function getExternals() : array
+    {
+        return[];
+    }
+
     public function processEvent(object $event): void
     {
         // process no events by default
@@ -77,6 +82,10 @@ abstract class AbstractAsqModule implements  IAsqModule
         }
 
         $this->{$command}();
+    }
+
+    public function executeTransfer(string $transfer) : void {
+        //virtual method
     }
 
     public function createObject(ObjectConfiguration $config) : IAsqObject
