@@ -48,6 +48,8 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 
     protected ?IStorageModule $data = null;
 
+    protected ILIASReference $reference;
+
     /**
      * @var IAsqModule[]
      */
@@ -58,10 +60,11 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
      */
     protected array $objects = [];
 
-    public function __construct()
+    public function __construct(ILIASReference $reference)
     {
         global $DIC;
 
+        $this->reference = $reference;
         $this->event_queue = new EventQueue();
         $this->ui = new AsqUI();
         $this->access = new ObjectAccess($this);
@@ -95,6 +98,11 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     public function getModule(string $class) : IAsqModule
     {
         return $this->modules[$class];
+    }
+
+    public function getStorage(): IStorageModule
+    {
+        return $this->data;
     }
 
     public function getModulesOfType(string $class) : array

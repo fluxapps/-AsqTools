@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain;
 
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
+use Fluxlabs\Assessment\Tools\Domain\Modules\IStorageModule;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 
 /**
@@ -38,4 +39,11 @@ interface IObjectAccess
      * @return IAsqObject[]
      */
     function getObjectsOfModules(array $modules) : array;
+
+    /**
+     * Gets The Storagemodule of the Plugin
+     *
+     * @return IStorageModule
+     */
+    function getStorage() : IStorageModule;
 }

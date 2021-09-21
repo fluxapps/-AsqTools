@@ -5,6 +5,7 @@ namespace Fluxlabs\Assessment\Tools\Domain;
 
 
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
+use Fluxlabs\Assessment\Tools\Domain\Modules\IStorageModule;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\UI\System\IAsqUI;
 
@@ -24,6 +25,13 @@ interface IAsqPlugin
      * @return IAsqModule
      */
     function getModule(string $class) : IAsqModule;
+
+    /**
+     * Gets The Storagemodule of the Plugin
+     *
+     * @return IStorageModule
+     */
+    function getStorage() : IStorageModule;
 
     /**
      * Gets an object from the AsqPlugin

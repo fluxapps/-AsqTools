@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain;
 
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
+use Fluxlabs\Assessment\Tools\Domain\Modules\IStorageModule;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 
 /**
@@ -35,5 +36,10 @@ class ObjectAccess implements IObjectAccess
     public function getObjectsOfModules(array $modules) : array
     {
         return $this->plugin->getObjectsOfModules($modules);
+    }
+
+    public function getStorage() : IStorageModule
+    {
+        return $this->plugin->getStorage(IStorageModule::class);
     }
 }

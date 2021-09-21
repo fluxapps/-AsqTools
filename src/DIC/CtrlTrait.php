@@ -26,6 +26,11 @@ trait CtrlTrait
         return $this->ctrl;
     }
 
+    public function getLink(string $class, string $command = '')
+    {
+        return $this->getCtrl()->getLinkTargetByClass($class, $command);
+    }
+
     public function getCommandLink(string $command) : string
     {
         return $this->getCtrl()->getLinkTargetByClass(
@@ -46,5 +51,10 @@ trait CtrlTrait
             $this->getCtrl()->getCmdClass(),
             $parameter,
             $value);
+    }
+
+    public function forward(object $next) : void
+    {
+        $this->getCtrl()->forwardCommand($next);
     }
 }
