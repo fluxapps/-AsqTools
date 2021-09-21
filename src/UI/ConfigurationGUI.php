@@ -6,7 +6,7 @@ namespace Fluxlabs\Assessment\Tools\UI;
 use Fluxlabs\Assessment\Tools\Domain\IAsqPlugin;
 use srag\asq\Application\Service\UIService;
 use srag\asq\Test\Domain\Test\Model\AssessmentTestDto;
-use srag\CQRS\Aggregate\AbstractValueObject;
+use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 use ILIAS\UI\Component\Input\Container\Form\Form;
 use ILIAS\DI\UIServices;
 use srag\asq\UserInterface\Web\Form\Factory\IObjectFactory;

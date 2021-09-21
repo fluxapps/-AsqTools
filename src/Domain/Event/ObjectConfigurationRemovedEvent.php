@@ -5,7 +5,7 @@ namespace Fluxlabs\Assessment\Tools\Domain\Event;
 
 use ILIAS\Data\UUID\Uuid;
 use ilDateTime;
-use srag\CQRS\Event\AbstractDomainEvent;
+use Fluxlabs\CQRS\Event\AbstractDomainEvent;
 
 /**
  * Class ObjectConfigurationRemovedEvent

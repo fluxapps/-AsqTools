@@ -5,9 +5,9 @@ namespace Fluxlabs\Assessment\Tools\Domain\Model;
 
 use Fluxlabs\Assessment\Tools\Domain\Event\ObjectConfigurationRemovedEvent;
 use Fluxlabs\Assessment\Tools\Domain\Event\ObjectConfigurationSetEvent;
-use srag\CQRS\Aggregate\AbstractAggregateRoot;
+use Fluxlabs\CQRS\Aggregate\AbstractAggregateRoot;
 use ilDateTime;
-use srag\CQRS\Aggregate\AbstractValueObject;
+use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 
 /**
  * Abstract Class PluginAggregateRoot
