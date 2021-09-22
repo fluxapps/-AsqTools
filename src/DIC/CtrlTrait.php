@@ -53,6 +53,11 @@ trait CtrlTrait
             $value);
     }
 
+    public function getLinkParameter(string $parameter) : string
+    {
+        return $_GET[$parameter];
+    }
+
     public function forward(object $next) : void
     {
         $this->getCtrl()->forwardCommand($next);
