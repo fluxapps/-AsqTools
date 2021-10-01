@@ -77,14 +77,13 @@ class AsqTable
         $action_buttons = [];
 
         foreach ($this->actions as $title => $action) {
-            $action_buttons[] = $this->getKSFactory()->button()->shy(
-                $title,
-                $action
+            $action_buttons[] = sprintf(
+                '<button class="btn btn-default" formmethod="post" formaction="%s">%s</button>',
+                $action,
+                $title
             );
         }
 
-        $actions = $this->getKSFactory()->dropdown()->standard($action_buttons)->withLabel('TODO Action');
-
-        return $this->renderKSComponent($actions);
+        return implode('&nbsp;', $action_buttons);
     }
 }
