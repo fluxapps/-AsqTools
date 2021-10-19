@@ -53,7 +53,7 @@ trait CtrlTrait
             $value);
     }
 
-    public function getLinkParameter(string $parameter) : string
+    public function getLinkParameter(string $parameter) : ?string
     {
         return $_GET[$parameter];
     }
