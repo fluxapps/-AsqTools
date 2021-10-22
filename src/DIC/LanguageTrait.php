@@ -14,7 +14,7 @@ use ilLanguage;
  */
 trait LanguageTrait
 {
-    protected ?ilLanguage $language;
+    protected ?ilLanguage $language = null;
 
     private function getLanguage() : ilLanguage
     {
@@ -26,8 +26,13 @@ trait LanguageTrait
         return $this->language;
     }
 
-    protected function getTranslation(string $key) : string
+    protected function txt(string $key) : string
     {
         return $this->getLanguage()->txt($key);
+    }
+
+    protected function loadLanguageModule(string $key) : void
+    {
+        $this->getLanguage()->loadLanguageModule($key);
     }
 }
