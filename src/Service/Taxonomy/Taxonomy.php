@@ -54,6 +54,8 @@ class Taxonomy
 
     public function createNewNode(int $parent_id, string $title) : void
     {
+        $this->loadTaxonomy();
+
         $node = new ilTaxonomyNode();
         $node->setTitle($title);
         $node->setTaxonomyId($this->taxonomy_id);
