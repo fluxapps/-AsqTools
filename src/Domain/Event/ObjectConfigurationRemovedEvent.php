@@ -21,11 +21,10 @@ class ObjectConfigurationRemovedEvent extends AbstractDomainEvent
     public function __construct(
         Uuid $aggregate_id,
         ilDateTime $occured_on,
-        int $initiating_user_id,
         string $config_for = null
         ) {
             $this->config_for = $config_for;
-            parent::__construct($aggregate_id, $occured_on, $initiating_user_id);
+            parent::__construct($aggregate_id, $occured_on);
     }
 
     public function getConfigFor() : ?string

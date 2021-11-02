@@ -27,13 +27,12 @@ class ObjectConfigurationSetEvent extends AbstractDomainEvent
     public function __construct(
         Uuid $aggregate_id,
         ilDateTime $occured_on,
-        int $initiating_user_id,
         AbstractValueObject $config = null,
         string $config_for = null
         ) {
             $this->config = $config;
             $this->config_for = $config_for;
-            parent::__construct($aggregate_id, $occured_on, $initiating_user_id);
+            parent::__construct($aggregate_id, $occured_on);
     }
 
     public function getConfig() : ?AbstractValueObject

@@ -22,8 +22,7 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
 
     public function setConfiguration(
         AbstractValueObject $configuration,
-        string $configuration_for,
-        int $user_id) : void
+        string $configuration_for) : void
     {
         if (! array_key_exists($configuration_for, $this->configurations) ||
             ! AbstractValueObject::isNullableEqual($configuration, $this->configurations[$configuration_for])) {
@@ -31,7 +30,6 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
                 new ObjectConfigurationSetEvent(
                     $this->aggregate_id,
                     new ilDateTime(time(), IL_CAL_UNIX),
-                    $user_id,
                     $configuration,
                     $configuration_for
                 )
@@ -45,8 +43,7 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
     }
 
     public function removeConfiguration(
-        string $configuration_for,
-        int $user_id) : void
+        string $configuration_for) : void
     {
         if (array_key_exists($configuration_for, $this->configurations))
         {
@@ -54,7 +51,6 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
                 new ObjectConfigurationRemovedEvent(
                     $this->aggregate_id,
                     new ilDateTime(time(), IL_CAL_UNIX),
-                    $user_id,
                     $configuration_for
                 )
             );
