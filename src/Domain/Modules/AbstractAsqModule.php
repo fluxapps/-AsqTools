@@ -9,6 +9,7 @@ use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
 use Fluxlabs\Assessment\Tools\Event\IEventQueue;
 use srag\asq\Application\Exception\AsqException;
+use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 
 /**
  * Abstract class AbstractAsqModule
@@ -29,7 +30,7 @@ abstract class AbstractAsqModule implements  IAsqModule
         $this->access = $access;
     }
 
-    public function getConfigClass() : ?string
+    public function getConfigFactory() : ?AbstractObjectFactory
     {
         return null;
     }

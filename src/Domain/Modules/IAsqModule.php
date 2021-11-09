@@ -7,6 +7,7 @@ use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
 use Fluxlabs\Assessment\Tools\Event\IEventUser;
+use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 
 /**
  * Interface IAsqModule
@@ -18,12 +19,12 @@ use Fluxlabs\Assessment\Tools\Event\IEventUser;
 interface IAsqModule extends IEventUser
 {
     /**
-     * Return the class holding the configuration
+     * Return the configuration factory for the module
      * Null means no configuration is needed
      *
-     * @return ?string
+     * @return ?AbstractObjectFactory
      */
-    public function getConfigClass() : ?string;
+    public function getConfigFactory() : ?AbstractObjectFactory;
 
     /**
      * returns all commands provided by the module
