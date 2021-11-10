@@ -17,15 +17,23 @@ class ForwardToCommandEvent extends Event
 {
     private string $command;
 
-    public function __construct(IEventUser $sender, string $command)
-    {
-        $this->command = $command;
+    private ?array $parameters;
 
+    public function __construct(IEventUser $sender, string $command, ?array $parameters = null)
+    {
         parent::__construct($sender);
+
+        $this->command = $command;
+        $this->parameters = $parameters;
     }
 
     public function getCommand() : string
     {
         return $this->command;
+    }
+
+    public function getParameters() : ?array
+    {
+        return $this->parameters;
     }
 }

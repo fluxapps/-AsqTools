@@ -39,8 +39,14 @@ trait CtrlTrait
         );
     }
 
-    public function redirectToCommand(string $command) : void
+    public function redirectToCommand(string $command, ?array $parameters = null) : void
     {
+        if ($parameters !== null) {
+            foreach ($parameters as $parameter => $value) {
+                $this->setLinkParameter($parameter, $value);
+            }
+        }
+
         $link = $this->getCommandLink($command);
         $this->getCtrl()->redirectToURL($link);
     }

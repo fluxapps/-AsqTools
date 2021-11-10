@@ -186,13 +186,13 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
         }
 
         if (get_class($event) === ForwardToCommandEvent::class) {
-            $this->processForwardToCommandEvent($event->getCommand());
+            $this->processForwardToCommandEvent($event->getCommand(), $event->getParameters());
         }
     }
 
-    private function processForwardToCommandEvent(string $command) : void
+    private function processForwardToCommandEvent(string $command, ?array $parameters) : void
     {
-        $this->redirectToCommand($command);
+        $this->redirectToCommand($command, $parameters);
     }
 
     public function processStoreObjectEvent(IAsqObject $object) : void
