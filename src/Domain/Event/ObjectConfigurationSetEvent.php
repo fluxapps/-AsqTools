@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain\Event;
 
 use ILIAS\Data\UUID\Uuid;
-use ilDateTime;
+use DateTimeImmutable;
 use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 use Fluxlabs\CQRS\Event\AbstractDomainEvent;
 
@@ -26,7 +26,7 @@ class ObjectConfigurationSetEvent extends AbstractDomainEvent
 
     public function __construct(
         Uuid $aggregate_id,
-        ilDateTime $occured_on,
+        DateTimeImmutable $occured_on,
         AbstractValueObject $config = null,
         string $config_for = null
         ) {

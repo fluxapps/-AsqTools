@@ -6,7 +6,7 @@ namespace Fluxlabs\Assessment\Tools\Domain\Model;
 use Fluxlabs\Assessment\Tools\Domain\Event\ObjectConfigurationRemovedEvent;
 use Fluxlabs\Assessment\Tools\Domain\Event\ObjectConfigurationSetEvent;
 use Fluxlabs\CQRS\Aggregate\AbstractAggregateRoot;
-use ilDateTime;
+use DateTimeImmutable;
 use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 
 /**
@@ -29,7 +29,7 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
             $this->ExecuteEvent(
                 new ObjectConfigurationSetEvent(
                     $this->aggregate_id,
-                    new ilDateTime(time(), IL_CAL_UNIX),
+                    new DateTimeImmutable(),
                     $configuration,
                     $configuration_for
                 )
@@ -50,7 +50,7 @@ abstract class PluginAggregateRoot extends AbstractAggregateRoot
             $this->ExecuteEvent(
                 new ObjectConfigurationRemovedEvent(
                     $this->aggregate_id,
-                    new ilDateTime(time(), IL_CAL_UNIX),
+                    new DateTimeImmutable(),
                     $configuration_for
                 )
             );
