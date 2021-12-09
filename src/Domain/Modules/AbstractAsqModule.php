@@ -4,10 +4,12 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain\Modules;
 
 use Fluxlabs\Assessment\Tools\Domain\IObjectAccess;
+use Fluxlabs\Assessment\Tools\Domain\Model\Configuration\CompoundConfiguration;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
 use Fluxlabs\Assessment\Tools\Event\IEventQueue;
+use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 use srag\asq\Application\Exception\AsqException;
 use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 
@@ -24,10 +26,20 @@ abstract class AbstractAsqModule implements  IAsqModule
 
     protected IObjectAccess $access;
 
+    private ?AbstractValueObject $configuration = null;
+
     public function __construct(IEventQueue $event_queue, IObjectAccess $access)
     {
         $this->event_queue = $event_queue;
         $this->access = $access;
+    }
+
+    protected function getModuleConfiguration() : ?AbstractValueObject
+    {
+        if ($this->configuration === null) {
+            $this->configuration = $this->access->getStorage()->getConfiguration(get_class($this));
+        }
+        return $this->configuration;
     }
 
     public function getConfigFactory() : ?AbstractObjectFactory

@@ -101,7 +101,7 @@ class SettingsPage extends AbstractAsqModule implements IPageModule
 
         foreach ($this->modules as $module) {
             /** @var AbstractObjectFactory $factory */
-            $factory = $factory = $module->getConfigFactory();
+            $factory = $module->getConfigFactory();
             $config = $factory->readObjectFromPost($data);
             $this->access->getStorage()->setConfiguration(get_class($module), $config);
         }
