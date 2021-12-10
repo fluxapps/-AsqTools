@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain;
 
 use Fluxlabs\Assessment\Tools\DIC\CtrlTrait;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IStorageModule;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
@@ -18,6 +19,7 @@ use Fluxlabs\Assessment\Tools\Event\Standard\StoreObjectEvent;
 use Fluxlabs\Assessment\Tools\UI\System\AsqUI;
 use Fluxlabs\Assessment\Tools\UI\System\IAsqUI;
 use ILIAS\DI\Exceptions\Exception;
+use srag\asq\Application\Exception\AsqException;
 
 /**
  * Interface Test
@@ -31,14 +33,14 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     use CtrlTrait;
 
     /**
-     * @var IAsqModule[]
+     * @var CommandDefinition[]
      */
     protected array $commands = [];
 
     /**
      * @var IAsqModule[]
      */
-    protected array $transfers = [];
+    protected array $command_map = [];
 
     protected EventQueue $event_queue;
 
@@ -73,25 +75,29 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
         $this->event_queue->addUser($this);
     }
 
-    protected function addModule(IAsqModule $module) : void {
-        $class = get_class($module);
+    protected function addModule(string $class) : void {
+        /** @var IAsqModule $module */
+        $module = new $class($this->event_queue, $this->access);
         $this->modules[$class] = $module;
         $this->event_queue->addUser($module);
 
         if ($module instanceof IStorageModule) {
             if ($this->data !== null) {
-                throw new Exception('Test object can only have one datasource');
+                throw new AsqException('Test object can only have one datasource');
             }
 
             $this->data = $module;
         }
 
-        foreach ($module->getCommands() as $command) {
-            $this->commands[$command] = $module;
-        }
+        foreach ($module->getModuleDefinition()->getCommands() as $command) {
+            if (array_key_exists($command->getName(), $this->commands)) {
+                throw new AsqException(
+                    sprintf('Command "%s" defined multiple times', $command->getName())
+                );
+            }
 
-        foreach ($module->getExternals() as $external) {
-            $this->transfers[$external] = $module;
+            $this->commands[$command->getName()] = $command;
+            $this->command_map[$command->getName()] = $module;
         }
     }
 
@@ -103,6 +109,11 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     public function getStorage(): IStorageModule
     {
         return $this->data;
+    }
+
+    public function getReference() : ILIASReference
+    {
+        return $this->reference;
     }
 
     public function getModulesOfType(string $class) : array
@@ -154,15 +165,8 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 
     public function executeCommand(string $command) : void
     {
-        if (array_key_exists($command, $this->commands)) {
-            $this->commands[$command]->executeCommand($command);
-        }
-    }
-
-    function handleTransfer(string $next): void
-    {
-        if (array_key_exists($next, $this->transfers)) {
-            $this->transfers[$next]->executeTransfer($next);
+        if (array_key_exists($command, $this->command_map)) {
+            $this->command_map[$command]->executeCommand($command);
         }
     }
 

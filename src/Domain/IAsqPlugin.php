@@ -27,6 +27,14 @@ interface IAsqPlugin
     function getModule(string $class) : IAsqModule;
 
     /**
+     * Gets all modules of a type
+     *
+     * @param string $type
+     * @return IAsqModule[]
+     */
+    function getModulesOfType(string $type) : array;
+
+    /**
      * Gets The Storagemodule of the Plugin
      *
      * @return IStorageModule
@@ -57,16 +65,17 @@ interface IAsqPlugin
     function executeCommand(string $command) : void;
 
     /**
-     * Handles transfer to another ILIAS module
-     *
-     * @param string $nextClass
-     */
-    function handleTransfer(string $nextClass) : void;
-
-    /**
      * Gets access to the ui module of the Plugin
      *
      * @return IAsqUI
      */
     function ui() : IAsqUI;
+
+
+    /**
+     * Gets the current ILIASReference
+     *
+     * @return ILIASReference
+     */
+    function getReference() : ILIASReference;
 }

@@ -28,6 +28,11 @@ class ObjectAccess implements IObjectAccess
         return $this->plugin->getModule($class);
     }
 
+    function getModulesOfType(string $type): array
+    {
+        return $this->plugin->getModulesOfType($type);
+    }
+
     public function getObject(string $key) : IAsqObject
     {
         return $this->plugin->getObject($key);
@@ -41,5 +46,10 @@ class ObjectAccess implements IObjectAccess
     public function getStorage() : IStorageModule
     {
         return $this->plugin->getStorage(IStorageModule::class);
+    }
+
+    public function getReference(): ILIASReference
+    {
+        return $this->plugin->getReference();
     }
 }

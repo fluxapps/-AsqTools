@@ -9,13 +9,15 @@ use Fluxlabs\Assessment\Tools\DIC\KitchenSinkTrait;
 use Fluxlabs\Assessment\Tools\DIC\LanguageTrait;
 use Fluxlabs\Assessment\Tools\Domain\IObjectAccess;
 use Fluxlabs\Assessment\Tools\Domain\Modules\AbstractAsqModule;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\ModuleDefinition;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\TabDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
+use Fluxlabs\Assessment\Tools\Domain\Modules\IModuleDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IPageModule;
 use Fluxlabs\Assessment\Tools\Event\IEventQueue;
-use Fluxlabs\Assessment\Tools\Event\Standard\AddTabEvent;
 use Fluxlabs\Assessment\Tools\Event\Standard\ForwardToCommandEvent;
 use Fluxlabs\Assessment\Tools\Event\Standard\SetUIEvent;
-use Fluxlabs\Assessment\Tools\UI\System\TabDefinition;
 use Fluxlabs\Assessment\Tools\UI\System\UIData;
 use ILIAS\UI\Component\Input\Container\Form\Standard;
 use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
@@ -37,38 +39,30 @@ class SettingsPage extends AbstractAsqModule implements IPageModule
     const CMD_SHOW_SETTINGS = 'showSettings';
     const CMD_STORE_SETTINGS = 'storeSettings';
 
+    const SETTINGS_TAB = 'settings_tab';
+
     /**
      * @var IAsqModule[]
      */
     private array $modules;
 
-    /**
-     * @param IEventQueue $event_queue
-     * @param IObjectAccess $access
-     * @param IAsqModule[] $modules
-     */
-    public function __construct(IEventQueue $event_queue, IObjectAccess $access, array $modules)
-    {
-        parent::__construct($event_queue, $access);
-
-        foreach ($modules as $module) {
-            if ($module->getConfigFactory() !== null) {
-                $this->modules[] = $module;
-            }
-        }
-
-        $this->raiseEvent(new AddTabEvent(
-            $this,
-            new TabDefinition(self::class, $this->txt('asqt_settings'), self::CMD_SHOW_SETTINGS)
-        ));
-    }
-
     public function showSettings() : void
     {
+        $this->loadModules();
+
         $this->raiseEvent(new SetUIEvent(
             $this,
             new UIData($this->txt('asqt_settings'), $this->renderSettings())
         ));
+    }
+
+    private function loadModules()
+    {
+        foreach ($this->access->getModulesOfType(IAsqModule::class) as $module) {
+            if ($module->getModuleDefinition()->getConfigFactory() !== null) {
+                $this->modules[] = $module;
+            }
+        }
     }
 
     private function renderSettings() : string
@@ -110,11 +104,8 @@ class SettingsPage extends AbstractAsqModule implements IPageModule
         $this->raiseEvent(new ForwardToCommandEvent($this, self::CMD_SHOW_SETTINGS));
     }
 
-    public function getCommands() : array
+    public function getModuleDefinition(): IModuleDefinition
     {
-        return [
-            self::CMD_SHOW_SETTINGS,
-            self::CMD_STORE_SETTINGS
-        ];
+        return new SettingsModuleDefinition();
     }
 }

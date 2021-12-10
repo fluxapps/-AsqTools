@@ -19,26 +19,11 @@ use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 interface IAsqModule extends IEventUser
 {
     /**
-     * Return the configuration factory for the module
-     * Null means no configuration is needed
+     * Gets the Module definition, so the plugin is able to load the module
      *
-     * @return ?AbstractObjectFactory
+     * @return IModuleDefinition
      */
-    public function getConfigFactory() : ?AbstractObjectFactory;
-
-    /**
-     * returns all commands provided by the module
-     *
-     * @return string[]
-     */
-    public function getCommands() : array;
-
-    /**
-     * returns all external calls handeled by the module
-     *
-     * @return array
-     */
-    public function getExternals() : array;
+    public function getModuleDefinition() : IModuleDefinition;
 
     /**
      * executes a command in the module

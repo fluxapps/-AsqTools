@@ -5,6 +5,7 @@ namespace Fluxlabs\Assessment\Tools\Domain\Modules;
 
 use Fluxlabs\Assessment\Tools\Domain\IObjectAccess;
 use Fluxlabs\Assessment\Tools\Domain\Model\Configuration\CompoundConfiguration;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\ModuleDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
@@ -28,10 +29,17 @@ abstract class AbstractAsqModule implements  IAsqModule
 
     private ?AbstractValueObject $configuration = null;
 
-    public function __construct(IEventQueue $event_queue, IObjectAccess $access)
+    public final function __construct(IEventQueue $event_queue, IObjectAccess $access)
     {
         $this->event_queue = $event_queue;
         $this->access = $access;
+
+        $this->initialize();
+    }
+
+    protected function initialize() : void
+    {
+        // virtual function
     }
 
     protected function getModuleConfiguration() : ?AbstractValueObject
@@ -40,21 +48,6 @@ abstract class AbstractAsqModule implements  IAsqModule
             $this->configuration = $this->access->getStorage()->getConfiguration(get_class($this));
         }
         return $this->configuration;
-    }
-
-    public function getConfigFactory() : ?AbstractObjectFactory
-    {
-        return null;
-    }
-
-    public function getCommands() : array
-    {
-        return [];
-    }
-
-    public function getExternals() : array
-    {
-        return[];
     }
 
     public function processEvent(object $event): void
@@ -109,5 +102,10 @@ abstract class AbstractAsqModule implements  IAsqModule
                 get_class($this)
             )
         );
+    }
+
+    public function getModuleDefinition(): IModuleDefinition
+    {
+        return new ModuleDefinition();
     }
 }

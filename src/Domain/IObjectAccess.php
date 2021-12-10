@@ -25,6 +25,14 @@ interface IObjectAccess
     public function getModule(string $class) : IAsqModule;
 
     /**
+     * Gets all modules of a type
+     *
+     * @param string $type
+     * @return IAsqModule[]
+     */
+    function getModulesOfType(string $type) : array;
+
+    /**
      * Gets an object from the Test
      *
      * @param string $key
@@ -46,4 +54,11 @@ interface IObjectAccess
      * @return IStorageModule
      */
     function getStorage() : IStorageModule;
+
+    /**
+     * Gets the current ILIASReference
+     *
+     * @return ILIASReference
+     */
+    function getReference() : ILIASReference;
 }
