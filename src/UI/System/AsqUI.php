@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace Fluxlabs\Assessment\Tools\UI\System;
 
+use Fluxlabs\Assessment\Tools\DIC\LanguageTrait;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\TabDefinition;
 use Fluxlabs\Assessment\Tools\Event\Event;
 use Fluxlabs\Assessment\Tools\Event\IEventUser;
 use Fluxlabs\Assessment\Tools\Event\Standard\AddTabEvent;
@@ -17,11 +19,15 @@ use Fluxlabs\Assessment\Tools\Event\Standard\SetUIEvent;
  */
 class AsqUI implements IAsqUI, IEventUser
 {
+    use LanguageTrait;
+
     private string $title = '';
 
     private string $description = '';
 
     private array $tabs = [];
+
+    private string $active_tab = '';
 
     private string $content = '';
 
@@ -51,15 +57,28 @@ class AsqUI implements IAsqUI, IEventUser
                 }
             }
         }
+    }
 
-        if (get_class($event) === AddTabEvent::class) {
-            $this->tabs[] = $event->getTab();
-        }
+    public function addTab(TabDefinition $definition) : void
+    {
+        $this->tabs[] = $definition;
+    }
+
+    public function setActiveTab(string $tab_key) : void
+    {
+        $this->active_tab = $tab_key;
     }
 
     public function getTabs(): array
     {
-        return $this->tabs;
+        return array_map(function(TabDefinition $tab) {
+            return new UITab(
+                $tab->getId(),
+                $this->txt($tab->getTextKey()),
+                $tab->getLink(),
+                $tab->getId() === $this->active_tab
+            );
+        }, $this->tabs);
     }
 
     public function getTitle(): string

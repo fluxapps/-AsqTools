@@ -24,6 +24,8 @@ class TabDefinition
 
     protected int $priority;
 
+    protected bool $active = false;
+
     public function __construct(string $id, string $text_key, string $link, int $priority = self::PRIORITY_MEDIUM)
     {
         $this->id = $id;
@@ -50,5 +52,15 @@ class TabDefinition
     public function getPriority() : int
     {
         return $this->priority;
+    }
+
+    public function setActive() :  void
+    {
+        $this->active = true;
+    }
+
+    public function isActive() : bool
+    {
+        return $this->active;
     }
 }

@@ -35,21 +35,29 @@ class ModuleDefinition implements  IModuleDefinition
     private array $dependencies = [];
 
     /**
+     * @var string[]
+     */
+    private array $externals = [];
+
+    /**
      * @param string $config_factory_class
      * @param CommandDefinition[] $commands
      * @param string[] $dependencies
      * @param TabDefinition[] $tabs
+     * @param string[] $externals
      */
     public function __construct(
         string $config_factory_class = self::NO_CONFIG,
         array $commands = [],
         array $dependencies = [],
-        array $tabs = []
+        array $tabs = [],
+        array $externals = []
     ) {
         $this->config_factory_class = $config_factory_class;
         $this->dependencies = $dependencies;
         $this->commands = $commands;
         $this->tabs = $tabs;
+        $this->externals = $externals;
     }
 
     public function getConfigFactory(): ?AbstractObjectFactory
@@ -85,5 +93,10 @@ class ModuleDefinition implements  IModuleDefinition
     public function getTabs(): array
     {
         return $this->tabs;
+    }
+
+    public function getExternals() : array
+    {
+        return $this->externals;
     }
 }

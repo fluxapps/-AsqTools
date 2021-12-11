@@ -5,6 +5,7 @@ namespace Fluxlabs\Assessment\Tools\Domain\Modules;
 
 use Fluxlabs\Assessment\Tools\Domain\IObjectAccess;
 use Fluxlabs\Assessment\Tools\Domain\Model\Configuration\CompoundConfiguration;
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\ModuleDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
@@ -47,6 +48,9 @@ abstract class AbstractAsqModule implements  IAsqModule
         if ($this->configuration === null) {
             $this->configuration = $this->access->getStorage()->getConfiguration(get_class($this));
         }
+        if ($this->configuration === null) {
+            $this->configuration = $this->getModuleDefinition()->getConfigFactory()->getDefaultValue();
+        }
         return $this->configuration;
     }
 
@@ -60,14 +64,9 @@ abstract class AbstractAsqModule implements  IAsqModule
         $this->event_queue->raiseEvent($event);
     }
 
-    private function checkAccess(string $command) : bool
+    public function executeCommand(CommandDefinition $command): void
     {
-        return true;
-    }
-
-    public function executeCommand(string $command): void
-    {
-        if (!in_array($command, $this->getCommands())) {
+        if (!method_exists($this, $command->getName())) {
             throw new AsqException(
                 sprintf(
                     'module: "%s" cannot execute command: "%s"',
@@ -77,17 +76,7 @@ abstract class AbstractAsqModule implements  IAsqModule
             );
         }
 
-        if (!$this->checkAccess($command)) {
-            throw new AsqException(
-                sprintf(
-                    'user not allowed to execute command: "%s" on module: "%s"',
-                    $command,
-                    get_class($this)
-                )
-            );
-        }
-
-        $this->{$command}();
+        $this->{$command->getName()}();
     }
 
     public function executeTransfer(string $transfer) : void {

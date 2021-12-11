@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Fluxlabs\Assessment\Tools\Domain\Modules;
 
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
 use Fluxlabs\Assessment\Tools\Domain\Objects\ObjectConfiguration;
 use Fluxlabs\Assessment\Tools\Event\Event;
@@ -28,9 +29,9 @@ interface IAsqModule extends IEventUser
     /**
      * executes a command in the module
      *
-     * @param string $command
+     * @param CommandDefinition $command
      */
-    public function executeCommand(string $command): void;
+    public function executeCommand(CommandDefinition $command): void;
 
     /**
      * Hadles transfer to extenal class

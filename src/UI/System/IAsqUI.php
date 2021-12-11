@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace Fluxlabs\Assessment\Tools\UI\System;
 
+use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\TabDefinition;
+
 /**
  * Interface IAsqUI
  *
@@ -15,7 +17,7 @@ interface IAsqUI
     /**
      * The tabs to display
      *
-     * @return array
+     * @return UITab[]
      */
     public function getTabs() : array;
 

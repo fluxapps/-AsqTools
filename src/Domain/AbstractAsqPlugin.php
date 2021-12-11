@@ -42,9 +42,14 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
      */
     protected array $command_map = [];
 
+    /**
+     * @var IAsqModule[]
+     */
+    protected array $transfers = [];
+
     protected EventQueue $event_queue;
 
-    protected IAsqUI $ui;
+    protected AsqUI $ui;
 
     protected IObjectAccess $access;
 
@@ -89,7 +94,9 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
             $this->data = $module;
         }
 
-        foreach ($module->getModuleDefinition()->getCommands() as $command) {
+        $module_definition = $module->getModuleDefinition();
+
+        foreach ($module_definition->getCommands() as $command) {
             if (array_key_exists($command->getName(), $this->commands)) {
                 throw new AsqException(
                     sprintf('Command "%s" defined multiple times', $command->getName())
@@ -98,6 +105,14 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 
             $this->commands[$command->getName()] = $command;
             $this->command_map[$command->getName()] = $module;
+        }
+
+        foreach ($module_definition->getTabs() as $tab) {
+            $this->ui->addTab($tab);
+        }
+
+        foreach ($module_definition->getExternals() as $external) {
+            $this->transfers[strtolower($external)] = $module;
         }
     }
 
@@ -166,7 +181,18 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     public function executeCommand(string $command) : void
     {
         if (array_key_exists($command, $this->command_map)) {
-            $this->command_map[$command]->executeCommand($command);
+            $definition = $this->commands[$command];
+            $this->command_map[$command]->executeCommand($definition);
+            $this->ui->setActiveTab($definition->getTab());
+        }
+    }
+
+    function handleTransfer(string $next): void
+    {
+        $next_key = strtolower($next);
+
+        if (array_key_exists($next_key, $this->transfers)) {
+            $this->transfers[$next_key]->executeTransfer($next_key);
         }
     }
 

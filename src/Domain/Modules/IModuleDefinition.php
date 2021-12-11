@@ -50,4 +50,11 @@ interface IModuleDefinition
      * @return array
      */
     public function getDependencies() : array;
+
+    /**
+     * Gets all classes this module can transfer control to
+     *
+     * @return string[]
+     */
+    public function getExternals() : array;
 }

@@ -65,6 +65,13 @@ interface IAsqPlugin
     function executeCommand(string $command) : void;
 
     /**
+     * Handles transfer to another ILIAS module
+     *
+     * @param string $nextClass
+     */
+    function handleTransfer(string $nextClass) : void;
+
+    /**
      * Gets access to the ui module of the Plugin
      *
      * @return IAsqUI
