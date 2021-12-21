@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Fluxlabs\Assessment\Tools\DIC;
 
-use ILIAS\HTTP\Services;
+use ILIAS\DI\HTTPServices;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -15,9 +15,9 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 trait HttpTrait
 {
-    private ?Services $http = null;
+    private ?HTTPServices $http = null;
 
-    private function getHttp() : Services
+    private function getHttp() : HTTPServices
     {
         if ($this->http === null) {
             global $DIC;
