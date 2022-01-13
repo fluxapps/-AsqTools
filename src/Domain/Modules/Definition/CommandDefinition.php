@@ -12,11 +12,6 @@ namespace Fluxlabs\Assessment\Tools\Domain\Modules\Definition;
  */
 class CommandDefinition
 {
-    const ACCESS_PUBLIC = 'public_access';
-    const ACCESS_MEMBER = 'member_access';
-    const ACCESS_STAFF = 'staff_access';
-    const ACCESS_ADMIN = 'admin_access';
-
     protected string $name;
 
     protected string $access_level;

@@ -4,7 +4,9 @@ declare(strict_types = 1);
 namespace Fluxlabs\Assessment\Tools\Domain;
 
 use Fluxlabs\Assessment\Tools\DIC\CtrlTrait;
+use Fluxlabs\Assessment\Tools\DIC\UserTrait;
 use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
+use Fluxlabs\Assessment\Tools\Domain\Modules\IAccessModule;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IAsqModule;
 use Fluxlabs\Assessment\Tools\Domain\Modules\IStorageModule;
 use Fluxlabs\Assessment\Tools\Domain\Objects\IAsqObject;
@@ -31,6 +33,7 @@ use srag\asq\Application\Exception\AsqException;
 abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 {
     use CtrlTrait;
+    use UserTrait;
 
     /**
      * @var CommandDefinition[]
@@ -54,6 +57,8 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     protected IObjectAccess $access;
 
     protected ?IStorageModule $data = null;
+
+    protected ?IAccessModule $access_module = null;
 
     protected ILIASReference $reference;
 
@@ -88,10 +93,18 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
 
         if ($module instanceof IStorageModule) {
             if ($this->data !== null) {
-                throw new AsqException('Test object can only have one datasource');
+                throw new AsqException('Plugin object can only have one datasource');
             }
 
             $this->data = $module;
+        }
+
+        if ($module instanceof IAccessModule) {
+            if ($this->access_module !== null) {
+                throw new AsqException('Plugin object can only have one access module');
+            }
+
+            $this->access_module = $module;
         }
 
         $module_definition = $module->getModuleDefinition();
@@ -182,6 +195,17 @@ abstract class AbstractAsqPlugin implements IAsqPlugin, IEventUser
     {
         if (array_key_exists($command, $this->command_map)) {
             $definition = $this->commands[$command];
+
+            if ($this->access_module !== null && !$this->access_module->hasAccess($this->getCurrentUser(), $definition->getAccessLevel())) {
+                throw new AsqException(
+                    sprintf(
+                        'Access to command "%s" with access level "%s" denied for current user',
+                        $definition->getName(),
+                        $definition->getAccessLevel()
+                    )
+                );
+            }
+
             $this->command_map[$command]->executeCommand($definition);
             $this->ui->setActiveTab($definition->getTab());
         }
