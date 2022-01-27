@@ -31,4 +31,10 @@ trait UserTrait
     {
         return $this->getUser()->getId();
     }
+
+    protected function getUsername(int $user_id) : string
+    {
+        $user = new ilObjUser($user_id);
+        return $user->getPublicName();
+    }
 }
