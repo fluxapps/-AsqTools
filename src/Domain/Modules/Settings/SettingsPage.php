@@ -85,12 +85,14 @@ class SettingsPage extends AbstractAsqModule implements IPageModule
 
     public function storeSettings() : void
     {
+        $this->loadModules();
+
         $form = $this->createForm()->withRequest($this->getRequest());
         $data = $form->getData();
 
         foreach ($this->modules as $module) {
             /** @var AbstractObjectFactory $factory */
-            $factory = $module->getConfigFactory();
+            $factory = $module->getModuleDefinition()->getConfigFactory();
             $config = $factory->readObjectFromPost($data);
             $this->access->getStorage()->setConfiguration(get_class($module), $config);
         }
