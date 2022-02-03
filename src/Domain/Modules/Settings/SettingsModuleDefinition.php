@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 namespace Fluxlabs\Assessment\Tools\Domain\Modules\Settings;
+
 use Fluxlabs\Assessment\Tools\Domain\Modules\Access\AccessConfiguration;
 use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\CommandDefinition;
 use Fluxlabs\Assessment\Tools\Domain\Modules\Definition\ModuleDefinition;

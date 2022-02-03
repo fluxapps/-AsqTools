@@ -14,6 +14,7 @@ use Fluxlabs\Assessment\Tools\Domain\Modules\IPageModule;
 use Fluxlabs\Assessment\Tools\Event\Standard\ForwardToCommandEvent;
 use Fluxlabs\Assessment\Tools\Event\Standard\SetUIEvent;
 use Fluxlabs\Assessment\Tools\UI\System\UIData;
+use Fluxlabs\CQRS\Aggregate\AbstractValueObject;
 use ILIAS\UI\Component\Input\Container\Form\Standard;
 use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 
@@ -93,8 +94,22 @@ class SettingsPage extends AbstractAsqModule implements IPageModule
         foreach ($this->modules as $module) {
             /** @var AbstractObjectFactory $factory */
             $factory = $module->getModuleDefinition()->getConfigFactory();
-            $config = $factory->readObjectFromPost($data);
-            $this->access->getStorage()->setConfiguration(get_class($module), $config);
+            $new = $factory->readObjectFromPost($data);
+            $module_name = get_class($module);
+            $old = $this->access->getStorage()->getConfiguration($module_name);
+
+            if (!AbstractValueObject::isNullableEqual($new, $old)) {
+                $this->access->getStorage()->setConfiguration($module_name, $new);
+
+                $this->raiseEvent(
+                    new SettingsChangedEvent(
+                        $this,
+                        $module_name,
+                        $old,
+                        $new
+                    )
+                );
+            }
         }
         $this->access->getStorage()->save();
 
