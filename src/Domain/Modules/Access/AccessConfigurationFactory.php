@@ -18,7 +18,6 @@ use srag\asq\UserInterface\Web\Form\Factory\AbstractObjectFactory;
 class AccessConfigurationFactory extends AbstractObjectFactory
 {
     use UserTrait;
-    use LanguageTrait;
 
     const VAR_MEMBERS = 'ac_members';
     const VAR_STAFF = 'ac_staff';
@@ -30,9 +29,9 @@ class AccessConfigurationFactory extends AbstractObjectFactory
      */
     public function getFormfields(?AbstractValueObject $value): array
     {
-        $members = $this->factory->input()->field()->textarea($this->txt('asqt_label_members'));
-        $staff = $this->factory->input()->field()->textarea($this->txt('asqt_label_staff'));
-        $admins = $this->factory->input()->field()->textarea($this->txt('asqt_label_admins'));
+        $members = $this->factory->input()->field()->textarea($this->language->txt('asqt_label_members'));
+        $staff = $this->factory->input()->field()->textarea($this->language->txt('asqt_label_staff'));
+        $admins = $this->factory->input()->field()->textarea($this->language->txt('asqt_label_admins'));
 
         if ($value !== null) {
             $members = $members->withValue(implode(',', $value->getMembers()));
